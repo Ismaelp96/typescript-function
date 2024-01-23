@@ -85,6 +85,10 @@ var atualizarUI = function () {
         li.appendChild(svgIcon);
         li.appendChild(paragraph);
         li.appendChild(button);
+        li.addEventListener('click', function () {
+            estadoInicial = selecionarTarefa(estadoInicial, tarefa);
+            atualizarUI();
+        });
         ulTarefas === null || ulTarefas === void 0 ? void 0 : ulTarefas.appendChild(li);
     });
 };
