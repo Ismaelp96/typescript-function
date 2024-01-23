@@ -36,6 +36,15 @@ const selecionarTarefa = (
   };
 };
 
+const adicinarTarefa = (
+  estado: EstadoAplicacao,
+  tarefa: Tarefa,
+): EstadoAplicacao => {
+  return {
+    ...estado,
+    tarefas: [...estado.tarefas, tarefa],
+  };
+};
 const atualizarUI = () => {
   const taskIconSvg = `
         <svg class="app__section-task-icon-status" width="24" height="24" viewBox="0 0 24 24"
@@ -46,6 +55,7 @@ const atualizarUI = () => {
                 fill="#01080E" />
         </svg>
     `;
+
   const ulTarefas = document.querySelector('.app__section-task-list');
 
   const formAdicionarTarefa = document.querySelector<HTMLFormElement>(
@@ -54,14 +64,26 @@ const atualizarUI = () => {
   const btnAdicionarTarefa = document.querySelector<HTMLButtonElement>(
     '.app__button--add-task',
   );
-  const textarea = document.querySelector<HTMLTextAreaElement>('.')
+  const textarea = document.querySelector<HTMLTextAreaElement>(
+    '.app__form-textarea',
+  );
+
+  btnAdicionarTarefa.onclick = () => {
+    formAdicionarTarefa!.classList.toggle('hidden');
+  };
 
   if (!btnAdicionarTarefa) {
     throw Error('O elemento btnAdicionarTarefa não foi encontrado!');
   }
+  formAdicionarTarefa.onsubmit = (evento) => {
+    evento.preventDefault();
+    const descricao = textarea.value;
+    estadoInicial = adicinarTarefa(estadoInicial, {
+      descricao,
+      concluida: false,
+    });
 
-  btnAdicionarTarefa.onclick = () => {
-    formAdicionarTarefa?.classList.toggle('hidden');
+    atualizarUI();
   };
 
   if (ulTarefas) {
@@ -98,3 +120,5 @@ const atualizarUI = () => {
     ulTarefas?.appendChild(li);
   });
 };
+
+atualizarUI();
